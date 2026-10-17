@@ -1,16 +1,16 @@
 import pygame
-Black = (0,0,0) # define a variable for the colour black for easier use later
+BLACK = (0,0,0) # define a variable for the colour black for easier use later
 
+# This class represents the paddles used to hit the ball
 class Paddle(pygame.sprite.Sprite):
-    # This class represents the paddles used to hti the ball
 
     def __init__(self, colour, width, height):
         super().__init__()
 
         # make the paddle image
         self.image = pygame.Surface([width, height])
-        self.image.fill(Black)
-        self.image.set_colorkey(Black)
+        self.image.fill(BLACK)
+        self.image.set_colorkey(BLACK)
         pygame.draw.rect(self.image,colour,[0,0,width,height])
         self.rect = self.image.get_rect()
 
