@@ -2,8 +2,8 @@ Tic Tac Pong devlog #06
 <br> 
 18/10/2026 | jdo1-des 
 <br> 
-![screenshot of the pong screen showcasing power ups](https://github.com/jdo1-des/Tic-Tac-Pong/blob/598d238a3dd7032495403e010dda6ab7fc0739d5/power%20up%20on%20screen.jpg)
-TLDR: added a power ups to spice up gameplay. There a 3 types, a ball speed up, an opponent paddle slow down, and a lengthen to ur won paddle
+![screenshot of the pong screen showcasing power ups](https://github.com/jdo1-des/Tic-Tac-Pong/blob/598d238a3dd7032495403e010dda6ab7fc0739d5/power%20up%20on%20screen.jpg)<br>
+TLDR: added 3 power ups to spice up gameplay. There a 3 types, a ball speed up, an opponent paddle slow down, and a lengthen to ur won paddle
 <br>
 I added a new feature to my game, power ups! These help spice up the game play adn make each pong rally less repitive. To activate hit a green blob that randomly spawns on screen.
 I made the blob large as in playtesting I found it could be hard to hit it. But I wanted it to be hit often as rallies are quite short.
