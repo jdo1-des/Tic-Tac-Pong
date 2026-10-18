@@ -6,14 +6,17 @@ pygame.init()
 import tkinter as tk
 from tkinter import messagebox
 
+import random as rand
 import subprocess as sp
 import sys
 import os
 import pickle # import pickel for sending board across files
 
+
 from paddle import Paddle # import the paddle class from the paddle.py file
 from ball import Ball # import the ball from the ball.py file
 # link to tic tac toe file
+from powerup import PowerUp # imports the power up class form the powerup.py file
 BASE = os.path.dirname(os.path.abspath(__file__))
 SCRIPT = os.path.join(BASE, "tic tac toe.py")
 
@@ -44,16 +47,21 @@ SIZE = (700,500)
 SCREEN = pygame.display.set_mode(SIZE)
 pygame.display.set_caption("Pong")
 
+paddleA_height = 100
+paddleA_speed_multiplier = 1
+paddleB_height = 100
+paddleB_speed_multiplier = 1
+
 all_sprites_list = pygame.sprite.Group() # create a group to hold all the sprites
 
 # create the first paddle
-paddleA = Paddle(BLUE,10,100)
+paddleA = Paddle(BLUE,10, paddleA_height)
 paddleA.rect.x = 20
 paddleA.rect.y = 200
 all_sprites_list.add(paddleA)
 
 # create the second paddle
-paddleB = Paddle(RED,10,100)
+paddleB = Paddle(RED,10, paddleB_height)
 paddleB.rect.x = 670
 paddleB.rect.y = 200
 all_sprites_list.add(paddleB)
@@ -68,8 +76,15 @@ carryOn = True
 
 # set up countdown
 count_down = True
-count_down_time = 3
-time_since_start = pygame.time.get_ticks()
+count_down_time = 3 # in s
+time_since_start = pygame.time.get_ticks() # in ms
+
+# set up power ups
+powerUp = None
+powerup_spawn_timer = 300 # hoiw often a power up spawns in frames
+expiry_time = 0
+power_active = False
+POWER_DURATION = 3000 # power length in ms
 
 # the clock will be used to control how fast the screen updates
 clock = pygame.time.Clock()
@@ -112,15 +127,15 @@ while carryOn:
 
     # Paddle A controls
     if keys[pygame.K_w]:
-        paddleA.moveUp(5)
+        paddleA.moveUp(6*paddleA_speed_multiplier)
     if keys[pygame.K_s]:
-        paddleA.moveDown(5)
+        paddleA.moveDown(6*paddleA_speed_multiplier)
 
     # Paddle B controls
     if keys[pygame.K_UP]:
-        paddleB.moveUp(5)
+        paddleB.moveUp(6*paddleB_speed_multiplier)
     if keys[pygame.K_DOWN]:
-        paddleB.moveDown(5)
+        paddleB.moveDown(6*paddleB_speed_multiplier)
 
     all_sprites_list.update()
 
@@ -137,11 +152,57 @@ while carryOn:
         ball.velocity[1] = -ball.velocity[1]
 
     # make the ball bounce if the paddles when it hits them.
-    if pygame.sprite.collide_mask(ball, paddleA) or pygame.sprite.collide_mask(ball, paddleB):
+    if pygame.sprite.collide_mask(ball, paddleA):
         ball.bounce()
+        ball.last_hit_by = "Paddle A"
+    elif pygame.sprite.collide_mask(ball, paddleB):
+        ball.bounce()
+        ball.last_hit_by = "Paddle B"
+
+    # power ups
+    powerup_spawn_timer -= 1 # decreases time till power up spawns
+    # spans power up when timer reaches 0
+    if powerup_spawn_timer <= 0 and powerUp is None and not power_active:
+        x = rand.randint(200, 500)
+        y = rand.randint(100, 400)
+        type = rand.randint(1,3)
+        powerUp = PowerUp(x, y, 75, 75, type)
+        all_sprites_list.add(powerUp)
+
+    if powerUp is not None and ball.last_hit_by is not None and pygame.sprite.collide_mask(ball, powerUp): # check if ball hits a power up while no other power ups active
+        power_type = powerUp.type
+        powerUp.kill()
+        powerUp = None
+        power_active = True
+        expiry_time = pygame.time.get_ticks() + POWER_DURATION # find time in ms at which power up should expire
+        if power_type == 1 :
+            ball.change_speed(2)
+        elif power_type == 2:
+            if  ball.last_hit_by == "Paddle A":
+                Paddle.set_height(paddleA, 200)
+            elif ball.last_hit_by == "Paddle B":
+                Paddle.set_height(paddleB, 200)
+        elif power_type == 3:
+            if ball.last_hit_by == "Paddle A":
+                paddleB_speed_multiplier = 0.5
+            elif ball.last_hit_by == "Paddle B":
+                paddleA_speed_multiplier = 0.5
+
+        
+    if power_active == True:
+        if pygame.time.get_ticks() >= expiry_time:
+            ball.change_speed(1)
+            Paddle.set_height(paddleA, 100)
+            Paddle.set_height(paddleB, 100)
+            paddleA_speed_multiplier = 1
+            paddleB_speed_multiplier = 1
+            power_active = False
+            powerup_spawn_timer = 300
+            expiry_time = 0
 
 
-    # moves on tot eh tic tac toe once the pong round has been won
+
+    # moves on to the tic tac toe once the pong round has been won
     if round_winner is not None:
             ball.rect.x = 345
             ball.rect.y = 195

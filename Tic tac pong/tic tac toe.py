@@ -107,10 +107,10 @@ while carryOn:
         # if user clicks the close button, the game stops running
         if event.type == pygame.QUIT:
             carryOn = False
-        if event.type == pygame.MOUSEBUTTONDOWN and event.pos[1] < BOARD_SIZE:
+        if event.type == pygame.MOUSEBUTTONDOWN and 50 <+event.pos[1] < SIZE[1]:
             # record where screen is clicked
             mouseX = event.pos[0]
-            mouseY = event.pos[1]
+            mouseY = event.pos[1] - 50
             # convert click cords to and row and colum
             chosen_row = int(mouseY // SPACE_SIZE)
             chosen_col = int(mouseX // SPACE_SIZE)
@@ -155,7 +155,7 @@ while carryOn:
         messagebox.showinfo("Round Over","Starting next round.")
         board_bytes = pickle.dumps(board)
         # open pong file and send board over
-        round = round + 1
+        round += 1
         process = sp.Popen([sys.executable, SCRIPT, str(round)], stdin=sp.PIPE, cwd=BASE)
         process.stdin.write(board_bytes)
         process.stdin.close()
