@@ -29,7 +29,7 @@ else:
     board = [[0] *3 for _ in range(3)]
     round = 1
 
-# turn board matrix into bytes so ti can be sent across files
+# turn board matrix into bytes so it can be sent across files
 board_bytes = pickle.dumps(board)
 
 # define colours as constants for easier use later
@@ -71,6 +71,9 @@ ball.rect.x = 345
 ball.rect.y = 195
 all_sprites_list.add(ball)
 
+# set text for the round counter
+round_counter = ROUND_FONT.render("Round " + str(round), True, WHITE, BLACK)
+
 # the game loop will carry on until the user exits the game (by clickling the close button).
 carryOn = True
 
@@ -86,8 +89,7 @@ expiry_time = 0
 power_active = False
 POWER_DURATION = 3000 # power length in ms
 
-# the clock will be used to control how fast the screen updates
-clock = pygame.time.Clock()
+clock = pygame.time.Clock() # the clock will be used to control how fast the screen updates
 
 round_winner = None # variable to hold the winner of the current round
 
@@ -101,9 +103,7 @@ while carryOn:
     SCREEN.fill(BLACK) # fills the screen with black colour
     pygame.draw.line(SCREEN, WHITE, [349,0], [349,500], 5) # draws line down middle of screen to act as net
 
-    # display the round number on the screen
-    round_counter = ROUND_FONT.render("Round " + str(round), True, WHITE, BLACK)
-    SCREEN.blit(round_counter, round_counter.get_rect(center=(SIZE[0] //2, 25)))
+    SCREEN.blit(round_counter, round_counter.get_rect(center=(SIZE[0] //2, 25))) # draw round number on screen
         
     all_sprites_list.draw(SCREEN) # draws all sprites at once
 

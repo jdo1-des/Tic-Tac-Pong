@@ -41,7 +41,6 @@ BOARD_ROWS = 3
 SPACE_SIZE = SIZE[0] / BOARD_COLS
 
 # Set start of game board state
-
 if len(sys.argv) > 1:
     round_winner = sys.argv[1]
     round = int(sys.argv[2])
@@ -98,6 +97,9 @@ def check_win(board, chosen_row, chosen_col,p):
         grand_winner = 0  
     return grand_winner 
 
+# set text for round counter
+round_counter = FONT.render("Round " + str(round), True, WHITE, BLACK)
+
 carryOn = True # as long as this variable is true game will continue to run
 round_over = False # when this becomes true go back to pong game
 
@@ -128,9 +130,7 @@ while carryOn:
     # draws the previous rounds board  
     draw_round_board()
 
-    # display the current round on the screen
-    round_counter = FONT.render("Round " + str(round), True, WHITE, BLACK)
-    SCREEN.blit(round_counter, round_counter.get_rect(midtop=(SIZE[0]//2, 10)))
+    SCREEN.blit(round_counter, round_counter.get_rect(midtop=(SIZE[0]//2, 10))) # draw round counter on screen
 
     # draw the grid lines
     # draw vertical lines
@@ -145,7 +145,7 @@ while carryOn:
     clock.tick(60) # limit the game to 60 frames per second
 
     if grand_winner != 0:
-        time.sleep(2)
+        time.sleep(1)
         messagebox.showinfo("Game Over","The Tic Tac Pong grand winner is " + grand_winner + "!")
         carryOn = False
     elif round_over == True and grand_winner == 0 and round == 9:
