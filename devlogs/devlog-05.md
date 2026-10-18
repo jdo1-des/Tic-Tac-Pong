@@ -1,4 +1,4 @@
-Tic Tac Pong devlog #04
+Tic Tac Pong devlog #05
 <br> 
 17/10/2026 | jdo1-des 
 <br> 
@@ -14,8 +14,8 @@ before it would only go right. This maeks the game more fair and random. There i
 I had some troubles where the countdown would flicker on the screen. But I fixed this by moving all the countdown code from a for into a while loop.
 This meant only the countdown would run, so nothing else was drawn over it. I fixed some errors witht eh variable and Cconstant names in my code. 
 There where a lot of constants not all caps, so I went through and made them all caps to conventionalize my code.
-I also patched an error where the tic tac toe would run if the pong fiel was launched outside a coed studio. This happened because in the code studio the files were all in the smae directory.
-But if you launched them directly they could be in different directories. To fix it I simpled had the files search for eachother before the game started, and saved their locations as variables to use later.
+I also patched an error where the tic tac toe would run if the pong fiel was launched outside a coed studio. This happened because in the code studio the files were all in the same directory.
+But if you launched them directly they could be in different directories. To fix it I simply had the files search for eachother before the game started, and saved their locations as variables to use later.
 Next I might add some power ups to spice up the gameplay. Power ups I have in mind are speeding up the ball for a short time, extending the paddle, and slowing down the opponent's paddle.
 <br>
 Completed: <br>
